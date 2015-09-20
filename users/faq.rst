@@ -216,7 +216,7 @@ https://api.github.com/repos/syncthing/syncthing/releases/latest and parsing the
 JSON response.
 
 Troubleshooting
----------------
+----------------
 
 Why does my NAS/RasPi/etc constantly shows 100% CPU usage
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
