@@ -219,7 +219,7 @@ Troubleshooting
 ---------------
 
 Why does my NAS/RasPi/etc constantly shows 100% CPU usage
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 The most likely reason is a ping-timout while processing the index transfer. If a device asks for a ping-response from a low powered device that is busy processing indexes, the low powered device may not respond in time resulting in a connection drop. This happens if you share a large data set with a very slow device.
 To fix this, change the key <pingTimeoutS> in your config.xml or in the webgui under Action->Advanced Settings->Options to a higher value on both the affected device as well as on any other device that shares large amounts of data with the affected device.
 
