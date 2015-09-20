@@ -125,11 +125,6 @@ from the user point of view. Moreover, if there's something that automatically
 causes a conflict on change you'll end up with ``sync-conflict-...sync-conflict
 -...-sync-conflict`` files.
 
-How to configure multiple users on a single machine?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Each user should run their own Syncthing instance. Be aware that you might need
-to configure ports such that they do not overlap (see the config.xml).
 
 Is Syncthing my ideal backup application?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -179,43 +174,6 @@ two nodes. An attacker can't do much with a stolen node ID, because you have to
 add the node on the other side too. You have better control where your files are
 transferred.
 
-How do I access the web GUI from another computer?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The default listening address is 127.0.0.1:8384, so you can only access the GUI
-from the same machine. Change the ``GUI listen address`` through the web UI from
-``127.0.0.1:8384`` to ``0.0.0.0:8384`` or change the config.xml:
-
-.. code-block:: xml
-
-    <gui enabled="true" tls="false">
-      <address>127.0.0.1:8384</address>
-
-to
-
-.. code-block:: xml
-
-    <gui enabled="true" tls="false">
-      <address>0.0.0.0:8384</address>
-
-Then the GUI is accessible from everywhere. You should most likely set a
-password and enable HTTPS now. You can do this from inside the GUI.
-
-If both your computers are Unixy (Linux, Mac, etc) You can also leave the GUI
-settings at default and use an ssh port forward to access it. For example,
-
-.. code-block:: bash
-
-    $ ssh -L 9090:127.0.0.1:8384 user@othercomputer.example.com
-
-will log you into othercomputer.example.com, and present the *remote* Syncthing
-GUI on http://localhost:9090 on your *local* computer. You should not open more
-than one Syncthing GUI in a single browser due to conflicting X-CSRFTokens. Any
-modification will be rejected. See :issue:`720` to work around this limitation.
-
-The CSRF tokens are stored using cookies. Therefore, if you get the message
-``Syncthing seems to be experiencing a problem processing your request``, you
-should verify the cookie settings of your browser.
 
 Why do I see Syncthing twice in task manager?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -256,3 +214,60 @@ Unfortunately GitHub does not provide a single URL to automatically download the
 latest version. We suggest to use the GitHub API at
 https://api.github.com/repos/syncthing/syncthing/releases/latest and parsing the
 JSON response.
+
+Troubleshooting
+---------------
+
+Why does my NAS/RasPi/etc constantly shows 100% CPU usage
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The most likely reason is a ping-timout while processing the index transfer. If a device asks for a ping-response from a low powered device that is busy processing indexes, the low powered device may not respond in time resulting in a connection drop. This happens if you share a large data set with a very slow device.
+To fix this, change the key <pingTimeoutS> in your config.xml or in the webgui under Action->Advanced Settings->Options to a higher value on both the affected device as well as on any other device that shares large amounts of data with the affected device.
+
+
+
+Tips and Tricks
+---------------
+
+How do I access the web GUI from another computer?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The default listening address is 127.0.0.1:8384, so you can only access the GUI
+from the same machine. Change the ``GUI listen address`` through the web UI from
+``127.0.0.1:8384`` to ``0.0.0.0:8384`` or change the config.xml:
+
+.. code-block:: xml
+
+    <gui enabled="true" tls="false">
+      <address>127.0.0.1:8384</address>
+
+to
+
+.. code-block:: xml
+
+    <gui enabled="true" tls="false">
+      <address>0.0.0.0:8384</address>
+
+Then the GUI is accessible from everywhere. You should most likely set a
+password and enable HTTPS now. You can do this from inside the GUI.
+
+If both your computers are Unixy (Linux, Mac, etc) You can also leave the GUI
+settings at default and use an ssh port forward to access it. For example,
+
+.. code-block:: bash
+
+    $ ssh -L 9090:127.0.0.1:8384 user@othercomputer.example.com
+
+will log you into othercomputer.example.com, and present the *remote* Syncthing
+GUI on http://localhost:9090 on your *local* computer. You should not open more
+than one Syncthing GUI in a single browser due to conflicting X-CSRFTokens. Any
+modification will be rejected. See :issue:`720` to work around this limitation.
+
+The CSRF tokens are stored using cookies. Therefore, if you get the message
+``Syncthing seems to be experiencing a problem processing your request``, you
+should verify the cookie settings of your browser.
+
+How to configure multiple users on a single machine?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Each user should run their own Syncthing instance. Be aware that you might need
+to configure ports such that they do not overlap (see the config.xml).
